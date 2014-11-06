@@ -3,12 +3,14 @@
  */
 var Backbone = require("backbone");
 
-var FrameView = require("./views/FrameView.js");
+var FrameView = require("./views/FrameView.js"),
+    HomeView = require('./views/HomeView.js');
 
 var AppRouter = Backbone.Router.extend({
 
     routes: {
-        "": "default"
+        "": "default",
+        "posts": "posts"
     },
 
     initialize: function (app) {
@@ -23,6 +25,14 @@ var AppRouter = Backbone.Router.extend({
 
     default: function () {
         this.frame.render();
+    },
+
+    posts: function () {
+        this.frame.render();
+
+        var home = new HomeView();
+
+        home.render($('#posts'));
     }
 
 });

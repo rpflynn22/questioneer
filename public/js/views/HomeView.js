@@ -10,18 +10,24 @@ var Backbone = require("backbone"),
 
 var template = require("../../templates/Home.html");
 
-var FrameView = Backbone.View.extend({
+var HomeView = Backbone.View.extend({
 
     template: _.template(template),
 
     initialize: function () {
+        console.log("Initialized HomeView");
     },
 
-    render: function () {
-        this.$el.html(this.template());
+    render: function ($elem) {
+        if ($elem) {
+            $elem.html(this.template());
+        } else {
+            this.$el.html(this.template());
+        }
+
 
         return this;
     }
 });
 
-module.exports = FrameView;
+module.exports = HomeView;
