@@ -15,10 +15,12 @@ var App = require('./App.js'),
 
 $(function onLoad() {
     var app = new App();
-    var router = new Router();
+    var router = new Router(app);
 
     app.router = router;
     window.app = app;
+
+    Backbone.history.start();
 
     app.init();
 });
