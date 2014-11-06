@@ -28,6 +28,9 @@ var paths = {
         target: "./public/build/js/",
         name: "questioneer.js"
     },
+    templates: {
+        source: "./public/templates/**/*.html"
+    },
     css: {
         source: "./public/css/**/*.scss",
         target: "./public/build/css/"
@@ -75,5 +78,6 @@ gulp.task('sass', function () {
 gulp.task('watch', function() {
     // When files change, update
     gulp.watch(paths.js.source, ['scripts']);
+    gulp.watch(paths.templates.source, ['scripts']);
     gulp.watch(paths.css.source, ['sass']);
 });
