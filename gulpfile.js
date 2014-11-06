@@ -78,6 +78,8 @@ gulp.task('sass', function () {
 gulp.task('watch', function() {
     // When files change, update
     gulp.watch(paths.js.source, ['scripts']);
+    // When templates change we also need to re-build, because the templates
+    // are required with Browserify and inside the JS
     gulp.watch(paths.templates.source, ['scripts']);
     gulp.watch(paths.css.source, ['sass']);
 });
