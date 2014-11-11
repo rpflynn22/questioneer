@@ -12,6 +12,7 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     sass = require('gulp-sass'),
     gutil = require('gulp-util'),
+    stringify = require('stringify'),
     minifycss = require('gulp-minify-css');
 
 function logErrorAndIgnore(err) {
@@ -25,6 +26,10 @@ var paths = {
         main: "./public/js/main.js",
         source: "./public/js/**/*.js",
         target: "./public/build/js/",
+        name: "questioneer.js"
+    },
+    templates: {
+        source: "./public/templates/**/*.html"
     },
     css: {
         source: "./public/css/**/*.scss",
@@ -34,6 +39,24 @@ var paths = {
 
 gulp.task('scripts', function () {
     // Run browserify on the main file and send to the target destination
+    var bundler = browserify({
+        entries: [paths.js.main]
+    });
+
+    var bundle = function () {
+        return bundler
+            .transform(stringify(['.html']))
+            .bundle()
+            .pipe(source(paths.js.name))
+            .pipe(gulp.dest(paths.js.target));
+    };
+
+    return bundle();
+});
+
+/*
+gulp.task('scripts', function () {
+    // Run browserify on the main file and send to the target destination
     return browserify(paths.js.main)
         .bundle()
         .pipe(source('scripts.js'))
@@ -41,6 +64,7 @@ gulp.task('scripts', function () {
         // TODO: uglify for non dev
         .pipe(gulp.dest(paths.js.target));
 });
+*/
 
 gulp.task('sass', function () {
     return gulp.src(source)
@@ -54,5 +78,8 @@ gulp.task('sass', function () {
 gulp.task('watch', function() {
     // When files change, update
     gulp.watch(paths.js.source, ['scripts']);
+    // When templates change we also need to re-build, because the templates
+    // are required with Browserify and inside the JS
+    gulp.watch(paths.templates.source, ['scripts']);
     gulp.watch(paths.css.source, ['sass']);
 });
