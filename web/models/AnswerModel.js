@@ -3,14 +3,15 @@ var schema = mongoose.Schema;
 var db = mongoose.createConnection(process.env.QUESTIONEER_MONGO_URI);
 var ObjectId = schema.ObjectId;
 
-var postSchema = mongoose.Schema({
+var answerSchema = mongoose.Schema({
   id: ObjectId,
+  postId: {type: ObjectId, ref: 'Post'},
   user: {type: String, required: true, trim: true},
-  postText: {type: String, trim: true},
-  bounty: {type: Number},
-  date: {type: Date}
+  answerText: {type: String, trim: true},
+  date: {type: Date},
+  accepted: {type: Boolean}
 });
 
-var Post = db.model('Post', postSchema);
+var Answer = db.model('Answer', answerSchema);
 
-module.exports = Post;
+module.exports = Answer;
