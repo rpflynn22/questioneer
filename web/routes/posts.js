@@ -17,12 +17,11 @@ router.get('/', function(req, res) {
 
 /* Post to add a post. */
 router.post('/', function(req, res) {
-  console.log(req.params);
-  console.log(req.body);
-  var userName = req.body.userName;
+  var user = req.body.user;
+  var title = req.body.title;
   var postText = req.body.postText;
   var bounty = req.body.bounty;
-  post = new Post({'user': userName, postText: postText, bounty: bounty, date: new Date()});
+  post = new Post({user: user, title: title, postText: postText, bounty: bounty, date: new Date()});
   post.save(function(err) {
   	if(err) {
   	  res.status(500).end();

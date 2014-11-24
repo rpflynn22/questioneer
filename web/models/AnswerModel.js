@@ -5,8 +5,8 @@ var ObjectId = schema.ObjectId;
 
 var answerSchema = mongoose.Schema({
   id: ObjectId,
-  postId: {type: ObjectId, ref: 'Post'},
-  user: {type: String, required: true, trim: true},
+  post: {type: ObjectId, ref: 'Post', required: true},
+  user: {type: ObjectId, ref: 'User', required: true},
   answerText: {type: String, trim: true},
   date: {type: Date},
   accepted: {type: Boolean}
