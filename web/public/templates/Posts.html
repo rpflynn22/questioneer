@@ -1,11 +1,11 @@
-<header> Posts </header>
+<header>Posts</header>
 
 <br>
-  <a href="/create_post" class="btn btn-primary btn-lg active" role="button">Create Post</a>
+  <button href="/create_post" type="button" class="btn btn-success">Create Post</button>
 </br>
 
 <div class="table-hover">
   <%_.each(posts, function(post) { %>
-    <a href="<%= post.title" % width=60>
+    <a href="<%=post.title" % width=60>
   <%= }); %>
 </div>
