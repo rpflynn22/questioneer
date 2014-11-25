@@ -39,9 +39,9 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/', routes);
-app.use('/api/answers', answers);
-app.use('/api/users', users);
-app.use('/api/posts', posts);
+app.use('/answers', answers);
+app.use('/users', users);
+app.use('/posts', posts);
 //app.use('/login', login);
 //app.use('/api/categories', categories);
 

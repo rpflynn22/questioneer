@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
       res.status(500).end();
       return console.error(err);
     }
-  	res.status(200).json(users);
+    //res.render('users', users);
   });
 });
 
@@ -34,13 +34,14 @@ router.post('/', function(req, res) {
   });
 });
 
-/* GET user with particular id. */
+/* GET user with particular username. */
 router.get('/:userName', function(req, res) {
   var query = User.findOne({'userName': req.param('userName')});
   query.exec(function(err, user) {
     if (err) return console.error(err);
     if (user) {
       res.status(200).json(user);
+      //res.render('user', user);
     } else {
       res.send(400).end();
     }

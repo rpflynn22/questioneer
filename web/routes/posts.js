@@ -11,7 +11,7 @@ router.get('/', function(req, res) {
   	  res.status(500).end();
   	  return console.error(err);
   	}
-  	res.status(200).json(posts);
+    res.render('posts', {posts: posts});
   });
 });
 
@@ -35,13 +35,14 @@ router.post('/', function(req, res) {
 /* GET a post with matching id. */
 router.get('/:id', function(req, res) {
   var query = Post.findOne({'_id': req.param('id')});
-  query.exec(function(err, user) {
+  query.exec(function(err, post) {
   	if (err) {
   	  res.status(500).end();
   	  return console.error(err);
   	}
-  	if (user) {
-  	  res.status(200).json(user);
+  	if (post) {
+  	  //res.status(200).json(post);
+      res.render('post', {post: post});
   	} else {
   	  res.status(400).end();
   	}
@@ -62,6 +63,7 @@ router.put('/:id', function(req, res) {
   	}
   	if (numAffected == 1) {
   	  res.status(200).end();
+      res.render('user', )
   	  return console.log('changed ' + numAffected.toString());
   	}
   	res.status(500).send('Bad number of records changed: ' + numAffected.toString());
