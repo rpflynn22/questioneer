@@ -1,7 +1,11 @@
+extends layout
+
 header #{post.title}:
 .container
   
-  p #{post.question}
+  p #{post.postText}
+  
+  span &nbsp;
   
   header Type Your Answer:
   form(action='/answer_post', method='post')
