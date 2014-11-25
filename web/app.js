@@ -12,6 +12,9 @@ var expressSession = require('express-session');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var posts = require('./routes/posts');
+var answers = require('./routes/answers');
+console.log(typeof answers);
+console.log(typeof posts);
 var dbConfig = require('./config/database.js');
 
 mongoose.connect(dbConfig.url);
@@ -36,6 +39,7 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/', routes);
+app.use('/api/answers', answers);
 app.use('/api/users', users);
 app.use('/api/posts', posts);
 //app.use('/login', login);
