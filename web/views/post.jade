@@ -1,14 +1,15 @@
 extends layout
 
-h1 #{post.title}
+block content
+  h1 #{post.title}
   h2 by #{post.user}
-.container
-  
-  p #{post.postText}
-  
-  span &nbsp;
-  
-  header Type Your Answer:
-  form(action='answer/', method='post')
-    textarea.form-control(name='answerText', rows='5')
-    button.btn.btn-success(type='submit') Submit Answer
+  .container
+    
+    p #{post.postText}
+    
+    span &nbsp;
+    
+    header Type Your Answer:
+    form(action='answer/', method='post')
+      textarea.form-control(name='answerText', rows='5')
+      button.btn.btn-success(type='submit') Submit Answer
