@@ -13,7 +13,7 @@ table.table.table-striped.table-condensed
     each post in posts
       tr
         td
-          a(href="/posts/#{post.id}") post.title
+          a(href="/posts/" + post.id) post.title
         td
           = post.date
         td
