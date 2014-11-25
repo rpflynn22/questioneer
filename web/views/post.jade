@@ -1,6 +1,7 @@
 extends layout
 
-h #{post.title}:
+h1 #{post.title}
+  h2 by #{post.user}
 .container
   
   p #{post.postText}
@@ -8,6 +9,6 @@ h #{post.title}:
   span &nbsp;
   
   header Type Your Answer:
-  form(action='/answer_post', method='post')
-    textarea.form-control(name='answer', rows='5')
+  form(action='answer/', method='post')
+    textarea.form-control(name='answerText', rows='5')
     button.btn.btn-success(type='submit') Submit Answer
