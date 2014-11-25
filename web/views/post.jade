@@ -1,0 +1,9 @@
+header #{post.title}:
+.container
+  
+  p #{post.question}
+  
+  header Type Your Answer:
+  form(action='/answer_post', method='post')
+    textarea.form-control(name='answer', rows='5')
+    button.btn.btn-success(type='submit') Submit Answer

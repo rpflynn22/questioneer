@@ -1,0 +1,11 @@
+h Create a Post!
+
+.container
+  form(action='/create_post')
+    .form-group
+      label Title
+      input.form-control(name='title', type='text', placeholder='Enter Title')
+    .form-group
+      label Your Question:
+      textarea.form-control(name='question', rows='5')
+    button.btn.btn-success(type='submit') Submit Question
