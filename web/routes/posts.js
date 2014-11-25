@@ -11,7 +11,10 @@ router.get('/', function(req, res) {
   	  res.status(500).end();
   	  return console.error(err);
   	}
-    res.render('posts', {posts: posts});
+    console.log(posts);
+    var data = {posts: posts};
+    //res.status(200).json(data);
+    res.render('posts', data);
   });
 });
 
@@ -63,7 +66,7 @@ router.put('/:id', function(req, res) {
   	}
   	if (numAffected == 1) {
   	  res.status(200).end();
-      res.render('user', )
+      //res.render('user', )
   	  return console.log('changed ' + numAffected.toString());
   	}
   	res.status(500).send('Bad number of records changed: ' + numAffected.toString());

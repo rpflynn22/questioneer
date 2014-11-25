@@ -43,7 +43,6 @@ app.use('/answers', answers);
 app.use('/users', users);
 app.use('/posts', posts);
 //app.use('/login', login);
-//app.use('/api/categories', categories);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
