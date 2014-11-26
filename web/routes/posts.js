@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Post = require('../models/PostModel');
 var mongoURI = process.env.QUESTIONEER_MONGO_URI;
+var db = mongoose.createConnection(process.env.QUESTIONEER_MONGO_URI);
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -38,18 +39,21 @@ router.post('/', function(req, res) {
 /* GET a post with matching id. */
 router.get('/:id', function(req, res) {
   var query = Post.findOne({'_id': req.param('id')});
-  query.exec(function(err, post) {
-  	if (err) {
-  	  res.status(500).end();
-  	  return console.error(err);
-  	}
-  	if (post) {
-  	  //res.status(200).json(post);
-      res.render('post', {post: post});
-  	} else {
-  	  res.status(400).end();
-  	}
-  });
+  query
+    .populate('user')
+    .exec(function(err, post) {
+    	if (err) {
+    	  res.status(500).end();
+    	  return console.error(err);
+    	}
+    	if (post) {
+        console.log(post);
+    	  //res.status(200).json(post);
+        res.render('post', {post: post});
+    	} else {
+    	  res.status(400).end();
+    	}
+    });
 });
 
 /* PUT to update a post with matching id. */

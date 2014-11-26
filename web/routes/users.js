@@ -22,8 +22,9 @@ router.get('/', function(req, res) {
 router.post('/', function(req, res) {
   var userName = req.body.userName;
   var email = req.body.email;
+  var password = req.body.password;
   var rippleAddress = req.body.rippleAddress;
-  user = new User({userName: userName, email: email, rippleAddress: rippleAddress, accountCredit: 0, date: new Date()});
+  user = new User({userName: userName, email: email, password: password, rippleAddress: rippleAddress, accountCredit: 0, date: new Date()});
   user.save(function(err) {
     if (err) {
       res.status(409).end();

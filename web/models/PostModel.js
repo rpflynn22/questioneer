@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
-var db = mongoose.createConnection(process.env.QUESTIONEER_MONGO_URI);
 var ObjectId = schema.ObjectId;
 
-var postSchema = mongoose.Schema({
+var postSchema = schema({
   id: ObjectId,
   user: {type: ObjectId, ref: 'User'},
   title: {type: String, trim: true, required: true},
@@ -12,6 +11,6 @@ var postSchema = mongoose.Schema({
   date: {type: Date}
 });
 
-var Post = db.model('Post', postSchema);
+var Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;

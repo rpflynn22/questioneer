@@ -9,15 +9,14 @@ var flash = require('connect-flash');
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
 
+var dbConfig = require('./config/database.js');
+
+mongoose.connect(dbConfig.url);
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var posts = require('./routes/posts');
 var answers = require('./routes/answers');
-console.log(typeof answers);
-console.log(typeof posts);
-var dbConfig = require('./config/database.js');
-
-mongoose.connect(dbConfig.url);
 
 //require('./config/passport')(passport);
 

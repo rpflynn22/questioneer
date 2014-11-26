@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
-var db = mongoose.createConnection(process.env.QUESTIONEER_MONGO_URI);
 var ObjectId = schema.ObjectId;
 
 var answerSchema = mongoose.Schema({
@@ -12,6 +11,6 @@ var answerSchema = mongoose.Schema({
   accepted: {type: Boolean}
 });
 
-var Answer = db.model('Answer', answerSchema);
+var Answer = mongoose.model('Answer', answerSchema);
 
 module.exports = Answer;
