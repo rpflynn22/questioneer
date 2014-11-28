@@ -16,11 +16,7 @@ module.exports = function(passport){
   /* GET login page. */
   router.get('/', function(req, res) {
       // Display the Login page with any flash message, if any
-    if (!req.isAuthenticated()) {
-      res.render('login', { message: req.flash('message') });
-    } else {
-      res.redirect('/home');
-    }
+    res.render('home');
   });
 
   /* Handle Login POST */
@@ -30,9 +26,9 @@ module.exports = function(passport){
     failureFlash : true  
   }));
 
-  /*router.get('/login', function(req, res) {
+  router.get('/login', function(req, res) {
     res.render('login');
-  });*/
+  });
 
   /* GET Registration Page */
   router.get('/signup', function(req, res){

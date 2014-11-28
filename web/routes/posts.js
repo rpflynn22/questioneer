@@ -51,6 +51,7 @@ module.exports = function(passport) {
     var query = Post.findOne({'_id': req.param('id')});
     query
       .populate('user')
+      .populate('answers')
       .exec(function(err, post) {
       	if (err) {
       	  res.status(500).end();
@@ -58,6 +59,7 @@ module.exports = function(passport) {
       	}
       	if (post) {
           console.log(post);
+          console.log(post.answers);
           res.render('post', {post: post, logged_in: req.isAuthenticated()});
       	} else {
       	  res.status(400).end();

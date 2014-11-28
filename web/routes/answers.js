@@ -21,17 +21,19 @@ module.exports = function(passport) {
   /* POST to add an answer. */
   router.post('/', function(req, res) {
     var post = req.body.post;
-    var user = req.body.user;
+    var user = req.user;
     var answerText = req.body.answerText;
-    answer = new Answer({post: post, user: user, answerText: answerText, date: new Date(), accepted: false});
-    answer.save(function(err) {
-    	if (err) {
-    	  res.status(500).end();
-    	  return console.error(err);
-    	}
-    	res.status(200).end();
-    	return console.log("Answer saved!");
-    });
+    if (user) {
+      answer = new Answer({post: post, user: user, answerText: answerText, date: new Date(), accepted: false});
+      answer.save(function(err) {
+      	if (err) {
+      	  res.status(500).end();
+      	  return console.error(err);
+      	}
+      	res.status(200).end();
+      	return console.log("Answer saved!");
+      });
+    }
   });
 
   /* PUT to change an answer to a question. */
