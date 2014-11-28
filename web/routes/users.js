@@ -12,7 +12,6 @@ module.exports = function(passport) {
       }
       res.status(200).json(users);
       console.log(req.isAuthenticated().toString());
-      //res.render('users', users);
     });
   });
 

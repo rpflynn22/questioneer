@@ -17,21 +17,33 @@ module.exports = function(passport) {
     });
   });
 
+  /* GET form to create a new post. */
+  router.get('/new', function(req, res) {
+    if (req.isAuthenticated()) {
+      res.render('create');
+    } else {
+      res.redirect('/');
+    }
+  });
+
   /* Post to add a post. */
   router.post('/', function(req, res) {
-    var user = req.body.user;
+    var user = req.user;
     var title = req.body.title;
     var postText = req.body.postText;
     var bounty = req.body.bounty;
-    post = new Post({user: user, title: title, postText: postText, bounty: bounty, date: new Date()});
-    post.save(function(err) {
-    	if(err) {
-    	  res.status(500).end();
-    	  return console.error(err);
-    	}
-    	res.status(200).end();
-    	return console.log('post saved');
-    });
+    if (user) {
+      post = new Post({user: user, title: title, postText: postText, bounty: bounty, date: new Date()});
+      post.save(function(err, this_post) {
+      	if(err) {
+      	  res.status(500).end();
+      	  return console.error(err);
+      	}
+        console.log(this_post._id);
+      	res.redirect('/posts/' + this_post._id.toString());
+      	return console.log('post saved');
+      });
+    }
   });
 
   /* GET a post with matching id. */
