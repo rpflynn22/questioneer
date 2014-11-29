@@ -6,13 +6,24 @@ block content
     h2 by #{post.user.userName}
     
     p #{post.postText}
-    
-    span &nbsp;
+
+    br
+    hr
+    br
+
+    each ans in answers
+      br
+      h4 #{ans.user.userName}
+      br
+      p #{ans.answerText}
+      br
+      hr
     
     if logged_in
       header Type Your Answer:
-      form(action='answer/', method='post')
+      form(action='/answers', method='post')
         textarea.form-control(name='answerText', rows='5')
+        input(type='hidden', name='post', value='#{post._id}')
         br
         button.btn.btn-success(type='submit') Submit Answer
     else

@@ -10,6 +10,7 @@ var userSchema = schema({
   rippleAddress: {type: String, required: true, trim: true},
   accountCredit: Number,
   posts: [{type: ObjectId, ref: 'Post'}],
+  answers: [{type: ObjectId, ref: 'Answer'}],
   date: Date
 });
 

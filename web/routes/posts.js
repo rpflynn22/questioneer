@@ -35,13 +35,19 @@ module.exports = function(passport) {
     if (user) {
       post = new Post({user: user, title: title, postText: postText, bounty: bounty, date: new Date()});
       post.save(function(err, this_post) {
-      	if(err) {
+      	if (err) {
       	  res.status(500).end();
       	  return console.error(err);
       	}
-        console.log(this_post._id);
-      	res.redirect('/posts/' + this_post._id.toString());
-      	return console.log('post saved');
+        user.posts.push(this_post);
+        user.save(function(err) {
+          if (err) {
+            res.status(500).end();
+            return console.error(err);
+          }
+          res.redirect('/posts/' + this_post._id.toString());
+          return console.log('post saved');
+        });
       });
     }
   });
@@ -50,17 +56,25 @@ module.exports = function(passport) {
   router.get('/:id', function(req, res) {
     var query = Post.findOne({'_id': req.param('id')});
     query
+      .lean ()
       .populate('user')
       .populate('answers')
       .exec(function(err, post) {
       	if (err) {
       	  res.status(500).end();
+          console.log(post.answers);
       	  return console.error(err);
       	}
+        var options = {
+          path: 'answers.user',
+          model: 'User'
+        }
       	if (post) {
-          console.log(post);
-          console.log(post.answers);
-          res.render('post', {post: post, logged_in: req.isAuthenticated()});
+          //console.log(post);
+          //console.log(post.answers);
+          Post.populate(post, options, function(err, answers) {
+            res.render('post', {post: post, logged_in: req.isAuthenticated(), answers: answers.answers});
+          });
       	} else {
       	  res.status(400).end();
       	}

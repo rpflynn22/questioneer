@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Answer = require('../models/AnswerModel');
+var Post = require('../models/PostModel');
 
 module.exports = function(passport) {
   /* GET an answer with an id. */
@@ -24,14 +25,37 @@ module.exports = function(passport) {
     var user = req.user;
     var answerText = req.body.answerText;
     if (user) {
-      answer = new Answer({post: post, user: user, answerText: answerText, date: new Date(), accepted: false});
-      answer.save(function(err) {
-      	if (err) {
-      	  res.status(500).end();
-      	  return console.error(err);
-      	}
-      	res.status(200).end();
-      	return console.log("Answer saved!");
+      var postQuery = Post.findOne({'_id': req.param('post')});
+      postQuery.exec(function(err, post) {
+        if (err) {
+          res.status(500).end();
+          return console.error(err);
+        }
+        if (post) {
+          answer = new Answer({post: post, user: user, answerText: answerText, date: new Date(), accepted: false});
+          answer.save(function(err, saved_answer) {
+            if (err) {
+              res.status(500).end();
+              return console.error(err);
+            }
+            post.answers.push(saved_answer);
+            post.save(function(err) {
+              if (err) {
+                res.status(500);
+                return console.error(err);
+              }
+            });
+            user.answers.push(saved_answer);
+            user.save(function(err) {
+              if (err) {
+                res.status(500).end();
+                return console.error(err);
+              }
+            });
+            res.redirect('/posts/' + post._id.toString());
+            return console.log("Answer saved!");
+          });
+        }
       });
     }
   });
