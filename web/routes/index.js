@@ -16,13 +16,13 @@ module.exports = function(passport){
   /* GET login page. */
   router.get('/', function(req, res) {
       // Display the Login page with any flash message, if any
-    res.render('home');
+    res.render('home', {logged_in: req.user});
   });
 
   /* Handle Login POST */
   router.post('/login', passport.authenticate('login', {
     successRedirect: '/home',
-    failureRedirect: '/',
+    failureRedirect: '/login',
     failureFlash : true  
   }));
 
