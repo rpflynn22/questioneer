@@ -24,7 +24,9 @@ module.exports = function(passport) {
     var email = req.body.email;
     var password = req.body.password;
     var rippleAddress = req.body.rippleAddress;
-    user = new User({userName: userName, email: email, password: password, rippleAddress: rippleAddress, accountCredit: 0, date: new Date()});
+    var accountCredit = 0;
+    console.log('HERE');
+    user = new User({userName: userName, email: email, password: password, rippleAddress: rippleAddress, accountCredit: accountCredit, date: new Date()});
     user.save(function(err) {
       if (err) {
         res.status(409).end();
@@ -41,8 +43,9 @@ module.exports = function(passport) {
     query.exec(function(err, user) {
       if (err) return console.error(err);
       if (user) {
-        res.status(200).json(user);
-        //res.render('user', user);
+        //res.status(200).json(user);
+        console.log(user);
+        res.render('user', {user: user, current_user_logged_in: req.user});
       } else {
         res.send(400).end();
       }

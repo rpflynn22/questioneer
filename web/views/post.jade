@@ -19,14 +19,16 @@ block content
       br
       hr
     
-    if logged_in
+    if (!current_user_logged_in)
+      p
+        a(href='/login') Log in 
+        | to answer this question!
+    else if (post.user.userName != current_user_logged_in.userName)
       header Type Your Answer:
       form(action='/answers', method='post')
         textarea.form-control(name='answerText', rows='5')
         input(type='hidden', name='post', value='#{post._id}')
         br
         button.btn.btn-success(type='submit') Submit Answer
-    else
-      p
-        a(href='/login') Log in 
-        | to answer this question!
+
+      

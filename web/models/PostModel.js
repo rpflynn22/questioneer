@@ -9,6 +9,7 @@ var postSchema = schema({
   postText: {type: String, trim: true, required: true},
   bounty: {type: Number, required: true},
   answers: [{type: ObjectId, ref: 'Answer'}],
+  answered: {type: Boolean, required: true},
   date: {type: Date}
 });
 

@@ -22,5 +22,11 @@ html
               a(href='/posts') Browse
             li
               a(href='/posts/new') Post
+          if current_user_logged_in
+            ul.nav.navbar-nav.navbar-right
+              li
+                a(href='/users/#{current_user_logged_in.userName}') Account
+              li
+                a(href='/signout') Sign Out
     
     block content

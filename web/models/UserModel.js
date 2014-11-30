@@ -8,7 +8,7 @@ var userSchema = schema({
   password: {type: String, required: true, trim: true},
   email: {type: String, required: true, trim: true, index: {unique: true}},
   rippleAddress: {type: String, required: true, trim: true},
-  accountCredit: Number,
+  accountCredit: {type: Number, required: true},
   posts: [{type: ObjectId, ref: 'Post'}],
   answers: [{type: ObjectId, ref: 'Answer'}],
   date: Date

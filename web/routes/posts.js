@@ -11,7 +11,7 @@ module.exports = function(passport) {
     	  return console.error(err);
     	}
       console.log(posts);
-      var data = {posts: posts};
+      var data = {posts: posts, current_user_logged_in: req.user};
       //res.status(200).json(data);
       res.render('posts', data);
     });
@@ -20,7 +20,7 @@ module.exports = function(passport) {
   /* GET form to create a new post. */
   router.get('/new', function(req, res) {
     if (req.isAuthenticated()) {
-      res.render('create');
+      res.render('create', {current_user_logged_in: req.user});
     } else {
       res.redirect('/');
     }
@@ -33,7 +33,7 @@ module.exports = function(passport) {
     var postText = req.body.postText;
     var bounty = req.body.bounty;
     if (user) {
-      post = new Post({user: user, title: title, postText: postText, bounty: bounty, date: new Date()});
+      post = new Post({user: user, title: title, postText: postText, bounty: bounty, answered: false, date: new Date()});
       post.save(function(err, this_post) {
       	if (err) {
       	  res.status(500).end();
@@ -73,7 +73,8 @@ module.exports = function(passport) {
           //console.log(post);
           //console.log(post.answers);
           Post.populate(post, options, function(err, answers) {
-            res.render('post', {post: post, logged_in: req.isAuthenticated(), answers: answers.answers});
+            console.log(post.user.userName == req.user.userName);
+            res.render('post', {post: post, logged_in: req.isAuthenticated(), answers: answers.answers, current_user_logged_in: req.user});
           });
       	} else {
       	  res.status(400).end();

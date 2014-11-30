@@ -16,35 +16,35 @@ module.exports = function(passport){
   /* GET login page. */
   router.get('/', function(req, res) {
       // Display the Login page with any flash message, if any
-    res.render('home', {logged_in: req.user});
+    res.render('home', {current_user_logged_in: req.user});
   });
 
   /* Handle Login POST */
   router.post('/login', passport.authenticate('login', {
-    successRedirect: '/home',
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash : true  
   }));
 
   router.get('/login', function(req, res) {
-    res.render('login');
+    res.render('login', {current_user_logged_in: req.user});
   });
 
   /* GET Registration Page */
   router.get('/signup', function(req, res){
-    res.render('signup', {message: req.flash('message')});
+    res.render('signup', {message: req.flash('message'), current_user_logged_in: req.user});
   });
 
   /* Handle Registration POST */
   router.post('/signup', passport.authenticate('signup', {
-    successRedirect: '/home',
+    successRedirect: '/',
     failureRedirect: '/signup',
     failureFlash : true  
   }));
 
   /* GET Home Page */
   router.get('/home', isAuthenticated, function(req, res){
-    res.render('home', { user: req.user });
+    res.render('home', { current_user_logged_in: req.user });
   });
 
   /* Handle Logout */

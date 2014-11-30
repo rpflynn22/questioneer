@@ -13,7 +13,7 @@ block content
         | Ask a question, or answer someone else's for money!
         br
         | All you need is a Ripple Trade account!
-      if logged_in
+      if current_user_logged_in
         a.btn.btn-success(type='button', href='/posts/new') Create Post
       else
         a.btn.btn-primary(type="button", href='/login') Log In
