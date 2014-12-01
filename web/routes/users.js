@@ -69,5 +69,21 @@ module.exports = function(passport) {
     });
   });
 
+  router.post('/cash-out', function(req, res) {
+    var user = req.user;
+    if (user && user.accountCredit > 0) {
+      var credit = user.accountCredit;
+      user.accountCredit = 0;
+      user.save(function(err) {
+        if (err) {
+          res.status(500).end();
+          return console.error(err);
+        }
+        console.log(user.userName + '\'s account emptied. Transfer ' + credit.toString() + ' XRP to user\'s ripple account.');
+        res.redirect('/users/' + user.userName);
+      });
+    }
+  });
+
   return router;
 }

@@ -3,15 +3,20 @@ extends layout
 block content
   br
   .container
-    .panel.panel-default
-      .panel-heading
-        h3.panel-title #{user.userName}
-      .panel-body
-        p email -> #{user.email}
-        p ripple addres -> #{user.rippleAddress}
-        p account credit -> #{user.accountCredit.toString()}
-        p number of posts -> #{user.posts.length}
-        p account activation date -> #{user.date.toString()}
-    if (user.userName == current_user_logged_in.userName)
-      form(action='/users/empty', method='post')
+    .row
+      .col-md-3
+      .col-md-6
+        .panel.panel-default
+          .panel-heading
+            h3.panel-title
+              b #{user.userName}
+          .panel-body
+            p email -> #{user.email}
+            p ripple address -> #{user.rippleAddress}
+            p account credit -> #{user.accountCredit.toString()}
+            p number of posts -> #{user.posts.length}
+            p account activation date -> #{user.date.toString()}
+      .col-md-3
+    if (current_user_logged_in && user.userName == current_user_logged_in.userName && user.accountCredit > 0)
+      form(action='/users/cash-out', method='post')
         button.btn.btn-danger(type='submit') Cash Out
