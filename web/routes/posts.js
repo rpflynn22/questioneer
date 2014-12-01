@@ -7,16 +7,18 @@ var User = require('../models/UserModel');
 module.exports = function(passport) {  
   /* GET users listing. */
   router.get('/', function(req, res) {
-    Post.find({}, function(err, posts) {
-    	if (err) {
-    	  res.status(500).end();
-    	  return console.error(err);
-    	}
-      console.log(posts);
-      var data = {posts: posts, current_user_logged_in: req.user};
-      //res.status(200).json(data);
-      res.render('posts', data);
-    });
+    var query = Post.find({});
+    query
+      .populate('user')
+      .exec(function(err, posts) {
+        if (err) {
+          res.status(500).end();
+          return console.error(err);
+        }
+        console.log(posts);
+        var data = {posts: posts, current_user_logged_in: req.user};
+        res.render('posts', data);
+      });
   });
 
   /* GET form to create a new post. */
@@ -166,6 +168,40 @@ module.exports = function(passport) {
           });
         } else {
           res.send("Fuck you").end();
+        }
+      });
+  });
+
+  /* DELETE a post if the user deleting it is the user that created it
+     and there are no answers. */
+  router.delete('/:id', function(req, res) {
+    var postId = req.param('id');
+    var postQuery = Post.findOne({'_id': postId, 'answers': []});
+    var user = req.user;
+    postQuery
+      .populate('user')
+      .exec(function(err, post) {
+        if (err) {
+          res.status(500);
+          return console.error(err);
+        }
+        if (post && post.user.userName == req.user.userName) {
+          var bounty = post.bounty;
+          post.remove(function(err) {
+            if (err) {
+              res.status(500).end();
+              return console.error(err);
+            }
+            user.accountCredit += bounty;
+            user.save(function(err) {
+              if (err) {
+                res.status(500).end();
+                return console.error(err);
+              }
+              console.log('Post removed and user\'s account refunded!');
+              res.redirect('/posts');
+            });
+          });
         }
       });
   });
