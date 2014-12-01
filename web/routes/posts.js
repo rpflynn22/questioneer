@@ -173,26 +173,32 @@ module.exports = function(passport) {
 
   /* DELETE a post if the user deleting it is the user that created it
      and there are no answers. */
-  router.delete('/:id', function(req, res) {
-    var postId = req.param('id');
+  router.post('/delete', function(req, res) {
+    console.log('here0');
+    var postId = req.body.id;
     var postQuery = Post.findOne({'_id': postId, 'answers': []});
     var user = req.user;
+
     postQuery
       .populate('user')
       .exec(function(err, post) {
+        console.log('here1');
         if (err) {
           res.status(500);
           return console.error(err);
         }
         if (post && post.user.userName == req.user.userName) {
           var bounty = post.bounty;
+          console.log('here2');
           post.remove(function(err) {
+            console.log('here3');
             if (err) {
               res.status(500).end();
               return console.error(err);
             }
             user.accountCredit += bounty;
             user.save(function(err) {
+              console.log('here4');
               if (err) {
                 res.status(500).end();
                 return console.error(err);
