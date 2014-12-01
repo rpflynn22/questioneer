@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  br
+  .container
+    .panel.panel-default
+      .panel-heading
+        h3.panel-title #{user.userName}
+      .panel-body
+        p email -> #{user.email}
+        p ripple addres -> #{user.rippleAddress}
+        p account credit -> #{user.accountCredit.toString()}
+        p number of posts -> #{user.posts.length}
+        p account activation date -> #{user.date.toString()}
