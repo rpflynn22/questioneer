@@ -30,6 +30,11 @@ block content
     hr
     br
 
+    if (current_user_logged_in && post.user.userName == current_user_logged_in.userName && answers.length == 0)
+      form(action='/posts/#{post._id}', method='delete')
+        button.btn.btn-danger(type='submit') Delete Post
+
+
     each ans in answers
       br
       if (ans.accepted)

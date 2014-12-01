@@ -15,7 +15,6 @@ module.exports = function(passport) {
           res.status(500).end();
           return console.error(err);
         }
-        console.log(posts);
         var data = {posts: posts, current_user_logged_in: req.user};
         res.render('posts', data);
       });
