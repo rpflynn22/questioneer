@@ -6,6 +6,3 @@ Things to still do
 	question posting stuff
 		js alerts to tell the customer they can't get their money back once someone posts
 		js alert that once an answer is accepted it can't be unaccepted
-	make login/signup stuff look nice
-	if you delete a question with no existing answers, refund bounty
-	put that shit on heroku

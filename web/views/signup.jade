@@ -2,22 +2,24 @@ extends layout
 
 block content
   .container
-  h1 Sign up for the Questioneer experience!
-    form(class='form-signin', action='/signup', method='POST')
-      .form-group
-        label Username
-        input(type='text', name='username', class='form-control', placeholder='Username',required, autofocus)
-      .form-group
-        label Password
-        input(type='password', name='password', class='form-control nomargin', placeholder='Password', required)
-      .form-group
-        label Email
-        input(type='email', name='email', class='form-control', placeholder='Email',required)
-      .form-group
-        label Ripple Address
-        input(type='text', name='rippleAddress', class='form-control', placeholder='Ripple Address',required)
-      button(class='btn btn-lg btn-primary btn-block', type='submit') Register
-      span.clearfix
-    #message
-    if message
-      h1.text-center.error-message #{message}
+  h1.text-center Sign up for the Questioneer experience!
+  br
+  .row
+    .col-md-4
+    .col-md-4
+      form(class='form-signin', action='/signup', method='POST')
+        .form-group
+          label Username
+          input(type='text', name='username', class='form-control', placeholder='Username',required, autofocus)
+        .form-group
+          label Password
+          input(type='password', name='password', class='form-control nomargin', placeholder='Password', required)
+        .form-group
+          label Email
+          input(type='email', name='email', class='form-control', placeholder='Email',required)
+        .form-group
+          label Ripple Address
+          input(type='text', name='rippleAddress', class='form-control', placeholder='Ripple Address',required)
+        button(class='btn btn-lg btn-primary btn-block', type='submit') Register
+        span.clearfix
+    .col-md-4

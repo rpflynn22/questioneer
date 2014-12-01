@@ -12,3 +12,6 @@ block content
         p account credit -> #{user.accountCredit.toString()}
         p number of posts -> #{user.posts.length}
         p account activation date -> #{user.date.toString()}
+    if (user.userName == current_user_logged_in.userName)
+      form(action='/users/empty', method='post')
+        button.btn.btn-danger(type='submit') Cash Out

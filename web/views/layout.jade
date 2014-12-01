@@ -28,5 +28,11 @@ html
                 a(href='/users/#{current_user_logged_in.userName}') Account
               li
                 a(href='/signout') Sign Out
+          else
+            ul.nav.navbar-nav.navbar-right
+              li
+                a(href='/signup') Sign Up
+              li
+                a(href='/login') Log In
     
     block content
