@@ -2,10 +2,29 @@ extends layout
 
 block content
   .container
-    h1 #{post.title}
-    h2 by #{post.user.userName}
-    
-    p #{post.postText}
+    br
+    if (post.answered)
+      .panel.panel-success
+        .panel-heading
+          h2 #{post.title}
+        .panel-body
+          p #{post.postText}
+        .panel-footer
+          p by 
+            b #{post.user.userName}
+            | , bounty: 
+            b #{post.bounty.toString()}
+    else
+      .panel.panel-primary
+        .panel-heading
+          h2 #{post.title}
+        .panel-body
+          p #{post.postText}
+        .panel-footer
+          p by 
+            b #{post.user.userName}
+            | , bounty: 
+            b #{post.bounty.toString()}
 
     br
     hr
@@ -13,13 +32,37 @@ block content
 
     each ans in answers
       br
-      h4 #{ans.user.userName}
-      br
-      p #{ans.answerText}
+      if (ans.accepted)
+        .panel.panel-success
+          .panel-heading
+            h4 Accepted
+          .panel-body
+            p #{ans.answerText}
+          .panel-footer
+            p by 
+              b #{ans.user.userName}
+      else if (!post.answered && current_user_logged_in && post.user.userName == current_user_logged_in.userName)
+        .panel.panel-info
+          .panel-body
+            p #{ans.answerText}
+          .panel-footer
+            p by 
+              b #{ans.user.userName}
+            form(action='/posts/#{post._id}/accept-answer/#{ans._id}', method='post')
+              input(type='hidden', name='user_receiving_credit', value='#{ans.user.userName}')
+              button.btn.btn-success(type='submit') Accept Answer
+      else
+        .panel.panel-info
+          .panel-body
+            p #{ans.answerText}
+          .panel-footer
+            p by 
+              b #{ans.user.userName}
+
       br
       hr
     
-    if (!current_user_logged_in)
+    if (!logged_in)
       p
         a(href='/login') Log in 
         | to answer this question!

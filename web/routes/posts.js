@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Post = require('../models/PostModel');
+var Answer = require('../models/AnswerModel');
+var User = require('../models/UserModel');
 
 module.exports = function(passport) {  
   /* GET users listing. */
@@ -32,7 +34,7 @@ module.exports = function(passport) {
     var title = req.body.title;
     var postText = req.body.postText;
     var bounty = req.body.bounty;
-    if (user) {
+    if (user && user.accountCredit >= bounty) {
       post = new Post({user: user, title: title, postText: postText, bounty: bounty, answered: false, date: new Date()});
       post.save(function(err, this_post) {
       	if (err) {
@@ -40,6 +42,7 @@ module.exports = function(passport) {
       	  return console.error(err);
       	}
         user.posts.push(this_post);
+        user.accountCredit -= bounty;
         user.save(function(err) {
           if (err) {
             res.status(500).end();
@@ -49,6 +52,8 @@ module.exports = function(passport) {
           return console.log('post saved');
         });
       });
+    } else if (user && user.accountCredit < bounty) {
+      res.redirect('/posts/new');
     }
   });
 
@@ -73,7 +78,6 @@ module.exports = function(passport) {
           //console.log(post);
           //console.log(post.answers);
           Post.populate(post, options, function(err, answers) {
-            console.log(post.user.userName == req.user.userName);
             res.render('post', {post: post, logged_in: req.isAuthenticated(), answers: answers.answers, current_user_logged_in: req.user});
           });
       	} else {
@@ -103,6 +107,67 @@ module.exports = function(passport) {
     	console.log('changed ' + numAffected.toString() + '. ');
     	return console.log('bad number of records changed');
     });
+  });
+
+  /* POST to accept an answer for a question. */
+  router.post('/:id/accept-answer/:answer_id', function(req, res) {
+    var postId = req.param('id');
+    var answerId = req.param('answer_id');
+    var userGettingCredit = req.body.user_receiving_credit;
+    var postQuery = Post.findOne({'_id': postId});
+    postQuery
+      .populate('user')
+      .exec(function(err, post) {
+        console.log('here1');
+        if (err) {
+          res.status(500).end();
+          return console.error(err);
+        }
+        if (post && post.user.userName == req.user.userName) {
+          console.log('here2');
+          var answerQuery = Answer.findOne({'_id': answerId});
+          answerQuery.exec(function(err, answer) {
+            
+            if (err) {
+              res.status(500).end();
+              return console.error(err);
+            }
+            answer.accepted = true;
+            answer.save(function(err) {
+              console.log('here3');
+              if (err) {
+                res.status(500).end();
+                return console.error(err);
+              }
+              console.log('Accepted answer saved!');
+            });
+            var bounty = post.bounty;
+            post.answered = true;
+            post.save(function(err) {
+              console.log('here4');
+              if (err) {
+                res.status(500).end();
+                return console.error(err);
+              }
+              console.log('Post updated as answered!');
+              var userQuery = {'userName': userGettingCredit};
+              var update = {$inc: {accountCredit: bounty}};
+              var options = {multi: false};
+              User.update(userQuery, update, options, function(err, numAffected) {
+                console.log('here5');
+                if (err) {
+                  res.status(500).end();
+                  return console.error(err);
+                }
+                console.log('Bounty updated!');
+                res.redirect('/posts/' + postId);
+              });
+            });
+          });
+        } else {
+          res.send("Fuck you").end();
+        }
+      });
   });
 
   return router;
