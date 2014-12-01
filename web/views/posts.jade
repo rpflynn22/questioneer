@@ -18,14 +18,21 @@ block content
         each post in posts
           tr
             td
-              button(href="/posts/" + post._id, class="btn btn-info") View
+              .text-center
+                a(href="/posts/" + post._id)
+                  button(class="btn btn-info") View
             td
-              = post.title
+              .text-center
+                = post.title
             td
-              = post.user.username
+              .text-center
+                = post.user.username
             td
-              = post.bounty
+              .text-center
+                = post.bounty
             td
-              = post.answered ? "No" : "Yes"
+              .text-center
+                = post.answered ? "No" : "Yes"
             td
-              = post.date.toLocaleString().split(' ').slice(1, 5).join(' ')
+              .text-center
+                = post.date.toLocaleString().split(' ').slice(1, 5).join(' ')
