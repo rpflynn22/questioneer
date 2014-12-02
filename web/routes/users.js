@@ -69,6 +69,16 @@ module.exports = function(passport) {
     });
   });
 
+  var RIPPLE_UUID_REQUEST_URL = 'https://api.ripple.com/v1/uuid';
+
+  function getClientResourceId() {
+    request(RIPPLE_UUID_REQUEST_URL, function(err, res, body) {
+      if (!err && res.statusCode == 200) {
+        return body;
+      }
+    });
+  }
+
   router.post('/cash-out', function(req, res) {
     var user = req.user;
     if (user && user.accountCredit > 0) {
