@@ -119,13 +119,11 @@ module.exports = function(passport) {
     postQuery
       .populate('user')
       .exec(function(err, post) {
-        console.log('here1');
         if (err) {
           res.status(500).end();
           return console.error(err);
         }
         if (post && post.user.userName == req.user.userName) {
-          console.log('here2');
           var answerQuery = Answer.findOne({'_id': answerId});
           answerQuery.exec(function(err, answer) {
             
@@ -135,7 +133,6 @@ module.exports = function(passport) {
             }
             answer.accepted = true;
             answer.save(function(err) {
-              console.log('here3');
               if (err) {
                 res.status(500).end();
                 return console.error(err);
@@ -145,7 +142,6 @@ module.exports = function(passport) {
             var bounty = post.bounty;
             post.answered = true;
             post.save(function(err) {
-              console.log('here4');
               if (err) {
                 res.status(500).end();
                 return console.error(err);
@@ -155,7 +151,6 @@ module.exports = function(passport) {
               var update = {$inc: {accountCredit: bounty}};
               var options = {multi: false};
               User.update(userQuery, update, options, function(err, numAffected) {
-                console.log('here5');
                 if (err) {
                   res.status(500).end();
                   return console.error(err);
@@ -174,7 +169,6 @@ module.exports = function(passport) {
   /* DELETE a post if the user deleting it is the user that created it
      and there are no answers. */
   router.post('/delete', function(req, res) {
-    console.log('here0');
     var postId = req.body.id;
     var postQuery = Post.findOne({'_id': postId, 'answers': []});
     var user = req.user;
@@ -182,23 +176,19 @@ module.exports = function(passport) {
     postQuery
       .populate('user')
       .exec(function(err, post) {
-        console.log('here1');
         if (err) {
           res.status(500);
           return console.error(err);
         }
         if (post && post.user.userName == req.user.userName) {
           var bounty = post.bounty;
-          console.log('here2');
           post.remove(function(err) {
-            console.log('here3');
             if (err) {
               res.status(500).end();
               return console.error(err);
             }
             user.accountCredit += bounty;
             user.save(function(err) {
-              console.log('here4');
               if (err) {
                 res.status(500).end();
                 return console.error(err);
