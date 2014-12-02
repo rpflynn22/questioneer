@@ -1,6 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/UserModel');
+var requre = require('request');
+
+var RIPPLE_API_ROOT = "https://api.ripple.com";
+var QUESTIONEER_RIPPLE_ADDRESS = "rHAhmDMyZRsUTZNXeNbT98LRx15x92YfqQ";
+var QUESTIONEER_RIPPLE_SECRET = "snX5RuM911ht6x3dEdNN9dGqE3KZQ";
 
 module.exports = function(passport) {
   /* GET users listing. */
@@ -15,7 +20,7 @@ module.exports = function(passport) {
     });
   });
 
-  /* 
+  /*
     POST to add users.
     Note that req.body... only works with POST type x-www-form-urlencoded.
   */
@@ -79,7 +84,45 @@ module.exports = function(passport) {
           res.status(500).end();
           return console.error(err);
         }
+
         console.log(user.userName + '\'s account emptied. Transfer ' + credit.toString() + ' XRP to user\'s ripple account.');
+
+        var preparePaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
+            QUESTIONEER_RIPPLE_ADDRESS +
+            '/payments/paths/' +
+            user.rippleAddress + '/' +
+            credit;
+
+        // Submit request to prepare payment
+        request(preparePaymentURL, function (err, res, body) {
+          var data = JSON.parse(body),
+              payment = data.payments[0];
+
+          // Submit request for UUID for submitting payment
+
+          // Now submit the payment to the Ripple network
+          var submitPaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
+              QUESTIONEER_RIPPLE_ADDRESS +
+              '/payments';
+
+          var submitPaymentBody = {
+            "payment": payment,
+            "client_resource_id": ,
+            "secret": QUESTIONEER_RIPPLE_SECRET
+          };
+
+          request.post({
+            url: submitPaymentURL,
+            body: submitPaymentBody,
+            json: true
+          }, function (err, res, body) {
+            // Body already parsed
+            if (body.success) {
+              console.log("Success!");
+            }
+          })
+        });
+
         res.redirect('/users/' + user.userName);
       });
     }
