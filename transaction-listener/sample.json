@@ -1,0 +1,35 @@
+{
+    engine_result: 'tesSUCCESS',
+    engine_result_code: 0,
+    engine_result_message: 'The transaction was applied.',
+    ledger_hash: '51C91463CC2EB2A5563B5CA75C37BA983A5DF29938D4BD25E5C759E8D957808E',
+    ledger_index: 10023278,
+    meta: {
+        AffectedNodes: [
+            [Object],
+            [Object]
+        ],
+        TransactionIndex: 0,
+        TransactionResult: 'tesSUCCESS'
+    },
+    status: 'closed',
+    transaction: {
+        Account: 'ravXdL8vNHTpD6n9SetcgEe9pNBAywKRg9',
+        Amount: '1000000',
+        Destination: 'rPpiBBQYmzbyg53E7jVrPnRNtV4acbUrdJ',
+        Fee: '12000',
+        Flags: 0,
+        LastLedgerSequence: 10023280,
+        Memos: [
+            [Object]
+        ],
+        Sequence: 2,
+        SigningPubKey: '02CC125E3EC747084382642B2BE278553513B4D3D2ED01320694E7865DD26EDB32',
+        TransactionType: 'Payment',
+        TxnSignature: '30440220103DDF9DA3B385ACD120CD69D482C9FD89D0E062D256CE0749AE8E78795A7E62022037D493EA506494F2A1CCAE3261B96BDF3F9B743FF150372A0FF8B9F10020019F',
+        date: 469687470,
+        hash: '329398DE3EDAC15676EA6DF1FA1AFDCE8CAC065BED756F7663A8236A0CEC3902'
+    },
+    type: 'transaction',
+    validated: true
+}

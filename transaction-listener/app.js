@@ -8,6 +8,8 @@ var WebSocketClient = require('ws'),
     secrets = require('./conf/secrets.json'),
     shared = require('../conf/shared.json');
 
+var User = require('./models/UserModel');
+
 mongoose.connect(shared.MONGO_URI);
 
 // Connect to Ripple's WSS
@@ -21,7 +23,7 @@ var SUBSCRIBE_REQUEST = {
         "server",
         "ledger"
     ]
-}
+};
 
 // Connection established!
 ws.on('open', function () {
@@ -37,6 +39,22 @@ ws.on('open', function () {
         if (isIncomingTransaction(parsed)) {
             // Received an incoming transaction, so now we need to add it to
             // mongo
+
+            var query = {
+                "rippleAddress": parsed.transaction.Account
+            };
+
+            var update = {
+                $inc: { "accountCredit": parsed.transaction.Amount / 1000000 }
+            };
+
+            User.update(query, update, {}, function (err, numAffected) {
+                if (err) {
+                    console.log("Error adding credit to: " + parsed.transaction.Account);
+                } else {
+                    console.log("Added credit to: " + parsed.transaction.Account);
+                }
+            });
         }
     });
 });
