@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/UserModel');
-var requre = require('request');
+var request = require('request');
 
 var RIPPLE_API_ROOT = "https://api.ripple.com";
-var QUESTIONEER_RIPPLE_ADDRESS = "rHAhmDMyZRsUTZNXeNbT98LRx15x92YfqQ";
-var QUESTIONEER_RIPPLE_SECRET = "snX5RuM911ht6x3dEdNN9dGqE3KZQ";
+var secrets = require('../secrets.json');
 
 module.exports = function(passport) {
   /* GET users listing. */
@@ -88,7 +87,7 @@ module.exports = function(passport) {
         console.log(user.userName + '\'s account emptied. Transfer ' + credit.toString() + ' XRP to user\'s ripple account.');
 
         var preparePaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
-            QUESTIONEER_RIPPLE_ADDRESS +
+            secrets.QUESTIONEER_RIPPLE_ADDRESS +
             '/payments/paths/' +
             user.rippleAddress + '/' +
             credit;
@@ -106,13 +105,13 @@ module.exports = function(passport) {
 
               // Now submit the payment to the Ripple network
               var submitPaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
-                  QUESTIONEER_RIPPLE_ADDRESS +
+                  secrets.QUESTIONEER_RIPPLE_ADDRESS +
                   '/payments';
 
               var submitPaymentBody = {
                 "payment": payment,
                 "client_resource_id": uuid,
-                "secret": QUESTIONEER_RIPPLE_SECRET
+                "secret": secrets.QUESTIONEER_RIPPLE_SECRET
               };
 
               request.post({
