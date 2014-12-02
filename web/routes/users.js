@@ -29,7 +29,6 @@ module.exports = function(passport) {
     var password = req.body.password;
     var rippleAddress = req.body.rippleAddress;
     var accountCredit = 0;
-    console.log('HERE');
     user = new User({userName: userName, email: email, password: password, rippleAddress: rippleAddress, accountCredit: accountCredit, date: new Date()});
     user.save(function(err) {
       if (err) {
