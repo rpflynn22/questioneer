@@ -5,12 +5,11 @@
 
 var WebSocketClient = require('ws'),
     mongoose = require('mongoose'),
-    secrets = require('./conf/secrets.json'),
-    shared = require('../conf/shared.json');
+    secrets = require('./conf/secrets.json');
 
 var User = require('./models/UserModel');
 
-mongoose.connect(shared.MONGO_URI);
+mongoose.connect(secrets.MONGO_URI);
 
 // Connect to Ripple's WSS
 var ws = new WebSocketClient(secrets.PUBLIC_RIPPLE_WSS);

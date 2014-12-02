@@ -5,15 +5,17 @@ block content
   .container
     br
     .starter-template
-      h1 
-        | Welcome to 
-        b Questioneer
+      h1
+        | Welcome to
+        b  Questioneer
         | , pretty much the coolest website ever.
       p.lead
         | Ask a question, or answer someone else's for money!
         br
         | All you need is a Ripple Trade account!
       if current_user_logged_in
+        | To send money to your account, send money using RippleTrade to the Questioneer Ripple Account: rHAhmDMyZRsUTZNXeNbT98LRx15x92YfqQ
+        br
         a.btn.btn-success(type='button', href='/posts/new') Create Post
       else
         a.btn.btn-primary(type="button", href='/login') Log In

@@ -77,58 +77,62 @@ module.exports = function(passport) {
     var user = req.user;
     if (user && user.accountCredit > 0) {
       var credit = user.accountCredit;
-      user.accountCredit = 0;
-      user.save(function(err) {
-        if (err) {
-          res.status(500).end();
-          return console.error(err);
-        }
 
-        console.log(user.userName + '\'s account emptied. Transfer ' + credit.toString() + ' XRP to user\'s ripple account.');
+      var preparePaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
+          secrets.QUESTIONEER_RIPPLE_ADDRESS +
+          '/payments/paths/' +
+          user.rippleAddress + '/' +
+          // Amount is amount+currency+issuer
+          credit + "+XRP+" + secrets.QUESTIONEER_RIPPLE_ADDRESS;
 
-        var preparePaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
-            secrets.QUESTIONEER_RIPPLE_ADDRESS +
-            '/payments/paths/' +
-            user.rippleAddress + '/' +
-            credit;
+      // Submit request to prepare payment
+      request(preparePaymentURL, function (err, res0, body) {
+        var data = JSON.parse(body);
+        console.log("AFTER SUBMITTING RESPONSE: " + body);
 
-        // Submit request to prepare payment
-        request(preparePaymentURL, function (err, res, body) {
-          var data = JSON.parse(body),
-              payment = data.payments[0];
+        var payment = data.payments[0];
 
-          // Submit request for UUID for submitting payment
-          request(RIPPLE_API_ROOT + '/v1/uuid', function(err, res, body) {
-            if (!err && res.statusCode == 200) {
-              var data = JSON.parse(body),
-                  uuid = data.uuid;
+        // Submit request for UUID for submitting payment
+        request(RIPPLE_API_ROOT + '/v1/uuid', function(err, resp, body) {
+          if (!err && resp.statusCode == 200) {
+            var data = JSON.parse(body),
+                uuid = data.uuid;
 
-              // Now submit the payment to the Ripple network
-              var submitPaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
-                  secrets.QUESTIONEER_RIPPLE_ADDRESS +
-                  '/payments';
+            // Now submit the payment to the Ripple network
+            var submitPaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
+                secrets.QUESTIONEER_RIPPLE_ADDRESS +
+                '/payments';
 
-              var submitPaymentBody = {
-                "payment": payment,
-                "client_resource_id": uuid,
-                "secret": secrets.QUESTIONEER_RIPPLE_SECRET
-              };
+            var submitPaymentBody = {
+              "payment": payment,
+              "client_resource_id": uuid,
+              "secret": secrets.QUESTIONEER_RIPPLE_SECRET
+            };
 
-              request.post({
-                url: submitPaymentURL,
-                body: submitPaymentBody,
-                json: true
-              }, function (err, res, body) {
-                // Body already parsed
-                if (body.success) {
-                  console.log("Success!");
-                }
-              });
-            }
-          });
+            request.post({
+              url: submitPaymentURL,
+              body: submitPaymentBody,
+              json: true
+            }, function (err, resp2, body) {
+              // Body already parsed
+              if (body.success) {
+                // Clear account XRP
+                console.log(user.userName + '\'s account emptied. Transfer ' + credit.toString() + ' XRP to user\'s ripple account.');
+
+                user.accountCredit = 0;
+                user.save(function(err) {
+                  if (err) {
+                    res.status(500).end();
+                    return console.error(err);
+                  }
+                });
+
+                res.redirect('/users/' + user.userName);
+              }
+            });
+          }
         });
 
-        res.redirect('/users/' + user.userName);
       });
     }
   });
