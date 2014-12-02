@@ -18,5 +18,6 @@ block content
             p account activation date -> #{user.date.toString()}
       .col-md-3
     if (current_user_logged_in && user.userName == current_user_logged_in.userName && user.accountCredit > 0)
-      form(action='/users/cash-out', method='post')
-        button.btn.btn-danger(type='submit') Cash Out
+      .text-center
+        form(action='/users/cash-out', method='post')
+          button.btn.btn-danger(type='submit') Cash Out
