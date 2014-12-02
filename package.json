@@ -33,6 +33,7 @@
     "stringify": "^3.0.0",
     "underscore": "~1.7.0",
     "vinyl-source-stream": "0.1.1",
-    "mongoose-validator": "~1.0.2"
+    "mongoose-validator": "~1.0.2",
+    "request": "~2.49.0"
   }
 }
