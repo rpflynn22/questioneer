@@ -74,16 +74,6 @@ module.exports = function(passport) {
     });
   });
 
-  var RIPPLE_UUID_REQUEST_URL = 'https://api.ripple.com/v1/uuid';
-
-  function getClientResourceId() {
-    request(RIPPLE_UUID_REQUEST_URL, function(err, res, body) {
-      if (!err && res.statusCode == 200) {
-        return body;
-      }
-    });
-  }
-
   router.post('/cash-out', function(req, res) {
     var user = req.user;
     if (user && user.accountCredit > 0) {
@@ -109,28 +99,34 @@ module.exports = function(passport) {
               payment = data.payments[0];
 
           // Submit request for UUID for submitting payment
+          request(RIPPLE_API_ROOT + '/v1/uuid', function(err, res, body) {
+            if (!err && res.statusCode == 200) {
+              var data = JSON.parse(body),
+                  uuid = data.uuid;
 
-          // Now submit the payment to the Ripple network
-          var submitPaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
-              QUESTIONEER_RIPPLE_ADDRESS +
-              '/payments';
+              // Now submit the payment to the Ripple network
+              var submitPaymentURL = RIPPLE_API_ROOT + '/v1/accounts/' +
+                  QUESTIONEER_RIPPLE_ADDRESS +
+                  '/payments';
 
-          var submitPaymentBody = {
-            "payment": payment,
-            "client_resource_id": ,
-            "secret": QUESTIONEER_RIPPLE_SECRET
-          };
+              var submitPaymentBody = {
+                "payment": payment,
+                "client_resource_id": uuid,
+                "secret": QUESTIONEER_RIPPLE_SECRET
+              };
 
-          request.post({
-            url: submitPaymentURL,
-            body: submitPaymentBody,
-            json: true
-          }, function (err, res, body) {
-            // Body already parsed
-            if (body.success) {
-              console.log("Success!");
+              request.post({
+                url: submitPaymentURL,
+                body: submitPaymentBody,
+                json: true
+              }, function (err, res, body) {
+                // Body already parsed
+                if (body.success) {
+                  console.log("Success!");
+                }
+              });
             }
-          })
+          });
         });
 
         res.redirect('/users/' + user.userName);
