@@ -9,7 +9,7 @@ var WebSocketClient = require('ws'),
 
 var User = require('./models/UserModel');
 
-mongoose.connect(secrets.MONGO_URI);
+mongoose.connect("mongodb://questioneer-dev:yogurt-buddy@linus.mongohq.com:10011/questioneer-master");
 
 // Connect to Ripple's WSS
 var ws = new WebSocketClient(secrets.PUBLIC_RIPPLE_WSS);
